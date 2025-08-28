@@ -1,20 +1,226 @@
 <?php
 
-if (isset($_POST['btn_1'])) {
-    echo "NU Bulldogs";
+$first_name = $middle_name = $last_name = $gender = $preffix = $seven_digit = $email = "";
+
+$first_nameErr = $middle_nameErr = $last_nameErr = $genderErr = $preffixErr = $seven_digitErr = $emailErr = "";
+
+
+if(isset($_POST['btnRegister'])){
+
+    if(empty($_POST['first_name'])){
+        $first_nameErr = "required!";
+    } else {
+        $first_name = $_POST['first_name'];
+    }
+
+    if(empty($_POST['middle_name'])){
+        $middle_nameErr = "required!";
+    } else {
+        $middle_name = $_POST['middle_name'];
+    }
+
+    if(empty($_POST['last_name'])){
+        $last_nameErr = "required!";
+    } else {
+        $last_name = $_POST['last_name'];
+    }
+
+    if(empty($_POST['gender'])){
+        $genderErr = "required!";
+    } else {
+        $gender = $_POST['gender'];
+    }
+
+    if(empty($_POST['preffix'])){
+        $preffixErr = "required!";
+    } else {
+        $preffix = $_POST['preffix'];
+    }
+
+    if(empty($_POST['seven_digit'])){
+        $seven_digitErr = "required!";
+    } else {
+        $seven_digit = $_POST['seven_digit'];
+    }
+
+    if(empty($_POST['preffix'])){
+        $preffixErr = "required!                    ";
+    } else {
+        $preffix = $_POST['preffix'];
+    }
+
+    if(empty($_POST['seven_digit'])){
+        $seven_digitErr = "required!";
+    } else {
+        $seven_digit = $_POST['seven_digit'];
+    }
+
+    if(empty($_POST['email'])){
+        $emailErr = "required!";
+    } else {
+        $email = $_POST['email'];
+    }
+
+if($first_name && $middle_name && $last_name && $gender && $preffix && $seven_digit && $email){
+
+if (!preg_match("/^[a-zA-Z]*$/", $first_name)) {
+    $first_nameErr = "Only letters are allowed";
+} else {
+    $count_first_name_string = strlen($first_name);
+    if($count_first_name_string < 2){
+        $first_nameErr = "Must be at least 2 characters";
+    
+    }else{
+        $count_middle_name_string = strlen($middle_name);
+        if($count_middle_name_string < 2){
+            $middle_nameErr = "Must be at least 2 characters";
+        }
+
+        $count_last_name_string = strlen($last_name);
+        if($count_last_name_string < 2){
+            $last_nameErr = "Must be at least 2 characters";
+        }
+
+        if (!preg_match("/^[0-9]*$/", $seven_digit)) {
+            $seven_digitErr = "Only numbers are allowed";
+        } else {
+            $count_seven_digit_string = strlen($seven_digit);
+            if($count_seven_digit_string < 7){
+                $seven_digitErr = "Must be at least 7 digits";
+            } else {
+
+               function random_password($Length = 5){
+                $str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                $shuffled = substr(str_shuffle($str), 0, $Length);
+                return $shuffled;
+            }
+            $password = random_password(8);
+include("connections.php");
+
+mysqli_query($connections, "INSERT INTO tbl_user (first_name, middle_name, last_name, gender, preffix, seven_digit, email, password) VALUES ('$first_name', '$middle_name', '$last_name', '$gender', '$preffix', '$seven_digit', '$email', '$password')");
+        
+echo "<script>window.location.href='success.php'</script>";
+
+}
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $emailErr = "Invalid email format";
+        } 
+
+    }
+
 }
 
 
-if (isset($_POST['btn_2'])) {
-    echo "Nationalians";
+}
+
+}
 }
 ?>
 
+<style>
+    .error {color: #FF0000;}
+</style>
+
+<script type="application/javascript">
+
+function isNumberKey(evt){
+
+var charCode = (evt.which) ? evt.which : event.keyCode;
+
+if (charCode > 31 && (charCode < 48 || charCode > 57))
+    return false;
+return true;
+}
+</script>
+
 <form method="POST">
 
+<center>
 
-<input type="submit" name="btn_1" value="Press 1">
+<table border="0"  width="50%">
+   
+       <tr><td> <input type="text" name="first_name" placeholder="First name" value="<?php echo $first_name; ?>"> <span class="error"><?php echo $first_nameErr; ?></span>   </td></tr>
+       <tr><td> <input type="text" name="middle_name" placeholder="Middle name" value="<?php echo $middle_name; ?>"> <span class="error"><?php echo $middle_nameErr; ?></span>   </td></tr>
+       <tr><td> <input type="text" name="last_name" placeholder="Last name" value="<?php echo $last_name; ?>"> <span class="error"><?php echo $last_nameErr; ?></span>   </td></tr>
 
-<input type="submit" name="btn_2" value="Press 2">
+       <tr>
+        <td>
+            <select name="gender">
+                <option name="gender" value="">Select Gender</option>
+
+                <option name="gender" value="Male" <?php if($gender == "Male" ) echo "selected"; ?>>Male</option>
+                <option name="gender" value="Female" <?php if($gender == "Female" ) echo "selected"; ?>>Female</option>
+            </select> <span class="error"><?php echo $genderErr; ?></span>
+        </td>
+       </tr>
+
+
+       <tr>
+        <td>
+            <select name="preffix">
+
+            <option name="preffix" id="preffix" value="">Network Provided (Globe, Smart, Sun, TNT, TM etc.)</option>
+
+            <option name="preffix" id="preffix" value="0813" <?php if($preffix == "0813" ) echo "selected"; ?>>0813</option>
+            <option name="preffix" id="preffix" value="0817" <?php if($preffix == "0817" ) echo "selected"; ?>>0817</option>
+            <option name="preffix" id="preffix" value="0905" <?php if($preffix == "0905" ) echo "selected"; ?>>0905</option>
+            <option name="preffix" id="preffix" value="0906" <?php if($preffix == "0906" ) echo "selected"; ?>>0906</option>
+            <option name="preffix" id="preffix" value="0907" <?php if($preffix == "0907" ) echo "selected"; ?>>0907</option>
+
+            </select> <span class="error"><?php echo $preffixErr; ?></span>
+
+            <input type="text" name="seven_digit" value="<?php echo $seven_digit; ?>" maxlength="7" placeholder="Other Seven Digit" onkeypress='return isNumberKey(event)'><span class="error"><?php echo $seven_digitErr; ?></span>
+
+        </td>
+       </tr>
+
+         <tr><td> <input type="text" name="email" placeholder="Email" value="<?php echo $email; ?>"> <span class="error"><?php echo $emailErr; ?></span>   </td></tr>
+
+        <tr>
+            <td>
+                <hr> 
+            </td>
+        </tr>
+
+        
+        <tr>
+            <td>
+
+               <input type="submit" name="btnRegister" value="Register">
+
+            </td>
+        </tr>
+
+</table>
+
+
+
+
+
+
+</center>
 
 </form>
+
+<?php
+include("connections.php");
+$result = mysqli_query($connections, "SELECT * FROM tbl_user");
+if(mysqli_num_rows($result) > 0){
+    echo '<center><h3>Registered Users</h3><table border="1" width="80%"><tr><th>First Name</th><th>Middle Name</th><th>Last Name</th><th>Gender</th><th>Preffix</th><th>Seven Digit</th><th>Email</th></tr>';
+    while($row = mysqli_fetch_assoc($result)){
+        echo '<tr>';
+        echo '<td>'.$row['first_name'].'</td>';
+        echo '<td>'.$row['middle_name'].'</td>';
+        echo '<td>'.$row['last_name'].'</td>';
+        echo '<td>'.$row['gender'].'</td>';
+        echo '<td>'.$row['preffix'].'</td>';
+        echo '<td>'.$row['seven_digit'].'</td>';
+        echo '<td>'.$row['email'].'</td>';
+        echo '</tr>';
+    }
+    echo '</table></center>';
+} else {
+    echo '<center><h3>No records found.</h3></center>';
+}
+?>
